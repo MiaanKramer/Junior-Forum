@@ -11,6 +11,19 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/categories', 'CategoryController@index');
+
+Route::get('/', function() {
+    return view('login');
+});
+
+Route::get('/home', function () {
+
+    return view('home');
+});
+
+Route::get('category/{category}', function(Categories $categories) {
+
+    dd($categories);
+
 });
