@@ -8,8 +8,8 @@ class Comment extends Model
 {
     //
 
-    public function getComments($post_id) {
-        
-        return static::where('post_id', $post_id);
+    public static function getComments($post_id) {
+
+        return static::where('post_id', $post_id)->get();
     }
 }

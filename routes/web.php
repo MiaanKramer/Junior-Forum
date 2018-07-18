@@ -11,37 +11,18 @@
 |
 */
 
-use App\Category;
-use App\Comment;
-use App\Post;
-use App\User;
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
 
 Route::get('/categories', 'CategoryController@index');
 
-Route::get('/categories/{id}', function($id) {
+Route::get('/categories/{category}', 'CategoryController@show');
 
-    $category = Category::find($id);
 
-    return view('categories.show');
+Route::get('/', function(){
+    return view('welcome');
 });
 
-
-
-Route::get('/login', function() {
-
-    return view('entry.login');
-
-});
-
-Route::get('/create', function() {
-
-    return view('entry.create');
-});
-
-
-
-Route::get('/home', function () {
-
-    return view('home');
-});
-
+Route::resource('posts', 'PostsController')->middleware(['auth']);

@@ -7,8 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
 
-    public function getPosts($cat_id) {
-        return static::where('category_id', $cat_id)->get();
+    public static function getPost($post_id) {
+
+        return static::find($post_id);
+    }
+
+    public static function getPosts($id) {
+
+        return static::where('user_id', $id)->get();
     }
 
 }
