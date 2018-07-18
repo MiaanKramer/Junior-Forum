@@ -15,7 +15,7 @@
                 <div class="card-footer">
                     <a href="posts/{{ $post->id }}" class="btn btn-info">View Post</a>
                     <a href="posts/{{ $post->id }}/edit" class="btn btn-warning">Edit Post</a>
-                    <a href="posts/{{ $post->id}}/delete" class="btn btn-danger">Delete Post</a>
+                    <a href="posts/{{ $post->id}}/delete" class="btn btn-danger"[onclick]="areYouSure({{ $post->id }})">Delete Post</a>
                 </div>
             </div>
         @endforeach

@@ -22,9 +22,9 @@ class PostsController extends Controller
     public function index()
     {
 
-        $user = Auth::user();
+        $user = $this->user();
 
-        $posts = Post::getPosts($user->id);
+        $posts = Post::forUser($user->id)->get();
 
         return view('posts.post-index', compact('posts', 'user'));
 
@@ -43,6 +43,7 @@ class PostsController extends Controller
 
         $create = true;
 
+
         return view('posts.post-form', compact('create', 'user'));
 
     }
@@ -56,6 +57,8 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         // do an actual post, redirect to post detail
+
+        
     }
 
     /**
@@ -70,7 +73,7 @@ class PostsController extends Controller
 
         $user = Auth::user();
 
-        $post = Post::getPost($id);
+        $post = Post::findOrFail($id);
 
         $comments = Comment::getComments($id);
 
@@ -89,7 +92,7 @@ class PostsController extends Controller
         // view the edit form
         $user = Auth::user();
 
-        $post = Post::getPost($id);
+        $post = Post::findOrFail($id);
 
         $create = false;
 
@@ -107,6 +110,11 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         // do actual update, redirect back to post detail
+        
+        $this->validate($request, [
+            'title' => 'required|min:2',
+            'body' => 'required|min:10',
+        ]);
     }
 
     /**
@@ -119,10 +127,15 @@ class PostsController extends Controller
     {
 
         $user = Auth::user();
+        $post = Post::findOrFail($id);
 
-        Post::destroy($id);
+        if($user->id !== $post->user_id){
+            abort(400, 'You are not the owner of this post.');
+        }
 
-        return view('posts.post-index', compact('user'));
+        $post->delete();
+
         // delete the post, redirect back to index
+        return redirect()->route('posts.index');
     }
 }
