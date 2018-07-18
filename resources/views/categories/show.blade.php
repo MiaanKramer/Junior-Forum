@@ -4,6 +4,6 @@
     <title>Categories</title>
 </head>
 <body>
-    <h1>{{ $cat->body }}</h1>
+    <h1>{{ $category }}</h1>
 </body>
 </html>
