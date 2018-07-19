@@ -8,8 +8,24 @@ class Comment extends Model
 {
     //
 
-    public static function getComments($post_id) {
+    // protected $with = ['user'];
 
-        return static::where('post_id', $post_id)->get();
+    // Setting up Relationships
+    public function user() {
+        return $this->belongsTo(User::class);
     }
+
+    public function post() {
+        return $this->belongsTo(Post::class);
+    }
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    } 
+
+    //Posting settings to set all data to entry without havinf to set each individually
+
+    protected $fillable = ['content'];
+
+
 }

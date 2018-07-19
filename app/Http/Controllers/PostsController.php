@@ -24,7 +24,12 @@ class PostsController extends Controller
 
         $user = $this->user();
 
-        $posts = Post::forUser($user->id)->get();
+        $posts = Post::forUser($user->id)
+                ->withCount('comments')
+                ->with(['category'])
+                ->get();
+
+        $posts = Post::paginate(5);
 
         return view('posts.post-index', compact('posts', 'user'));
 
@@ -57,6 +62,14 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         // do an actual post, redirect to post detail
+        dd($request);
+
+        $this->validate($request, [
+            'title' => 'required|min:2',
+            'body' => 'required|min:10',
+        ]);
+
+        return redirect()->route('posts.index');
 
         
     }
@@ -75,7 +88,11 @@ class PostsController extends Controller
 
         $post = Post::findOrFail($id);
 
-        $comments = Comment::getComments($id);
+        $comments = $post->comments()
+                         ->with(['user', 'category'])
+                         ->get();
+
+        $comments = Comment::paginate(10);
 
         return view('posts.post-detail', compact('post', 'user', 'comments'));
 
@@ -115,6 +132,8 @@ class PostsController extends Controller
             'title' => 'required|min:2',
             'body' => 'required|min:10',
         ]);
+
+        return redirect()->route('posts.index');
     }
 
     /**
